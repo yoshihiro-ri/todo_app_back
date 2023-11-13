@@ -1,0 +1,40 @@
+# Python
+*.pyc
+*.pyo
+__pycache__/
+*.pyc
+*.pyo
+*.pyc
+*.pyo
+*.pyc
+*.pyo
+*.pyc
+*.pyo
+
+# Virtual Environment
+venv/
+bin/
+lib/
+pyvenv.cfg
+share/
+
+# IDE/Editor specific
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Package files
+*.egg
+*.egg-info
+dist
+build
+
+# Others
+*.cache
+*.swp
