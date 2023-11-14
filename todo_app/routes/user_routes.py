@@ -3,21 +3,20 @@ from sqlalchemy import desc
 from todo_app.models import User  # モデルのインポート
 from todo_app import db
 from todo_app import ma
-from IPython import embed
+from todo_app.routes.operate_db import add_entry_and_close_session
+
 user_bp = Blueprint('user', __name__, url_prefix='/user')
-
-
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
+        fields = ("id", "name", "email", "password")  
+
 user_schema = UserSchema(many=True)
 
 # #GET(全件参照)
 @user_bp.route('/', methods=["GET"])
 def get_all_users():
-    print("hoge")
-
     data = User.query.all()
     return jsonify(user_schema.dump(data))
 
@@ -31,9 +30,7 @@ def get_user(id):
 @user_bp.route('/', methods=["POST"])
 def create_user():
     entry = User()
-    # jsonリクエストから値取得
     json = request.get_json()
-    print(json)
     if type(json) == list:
         data = json[0]
     else:
@@ -41,10 +38,7 @@ def create_user():
     entry.name = data["name"]
     entry.email = data["email"]
     entry.password = data["password"]
-
-    db.session.add(entry)
-    db.session.commit()
-    db.session.close()
+    add_entry_and_close_session(entry)
 
     latestData = User.query.order_by(desc(User.id)).first()   
     return redirect('/user/' + str(latestData.id))
@@ -53,7 +47,6 @@ def create_user():
 @user_bp.route('/<int:id>', methods=["PUT"])
 def update_user(id):
     entry = User.query.get(id)
-    # jsonリクエストから値取得
     json = request.get_json()
     if type(json) == list:
         data = json[0]
@@ -62,9 +55,7 @@ def update_user(id):
     entry.name = data["name"]
     entry.email = data["email"]
     entry.password = data["password"]
-    db.session.merge(entry)
-    db.session.commit()
-    db.session.close()
+    add_entry_and_close_session(entry)
 
     return redirect('/user/' + str(id))
 

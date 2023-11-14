@@ -16,15 +16,15 @@ class TaskCard(db.Model):
     __tablename__ = 'TaskCard'
     id = db.Column(Integer, primary_key=True) 
     user_id = db.Column(Integer, db.ForeignKey('User.id'), nullable=False)
+    title = db.Column(String(32),nullable=False)
 
 class Task(db.Model):
     __tablename__ = 'Task'
     id = db.Column(Integer, primary_key=True) 
-    user_id = db.Column(String(32),nullable=False)
+    content = db.Column(String(32),nullable=False)
     task_card_id = db.Column(Integer, db.ForeignKey('TaskCard.id'), nullable=False)
 
 def init():
-    print("hoge")
     with app.app_context():
         db.create_all()
 
