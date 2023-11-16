@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request,redirect
 from todo_app.models import TaskCard, db,ma
 from sqlalchemy import desc
 from todo_app.routes.operate_db import add_entry_and_close_session
+from todo_app.routes.request_utils import get_data_from_json
 
 task_card_bp= Blueprint('task_card', __name__, url_prefix='/task_card')
 
@@ -19,18 +20,14 @@ def get_all_task_cards():
 
 @task_card_bp.route('/<int:id>', methods=["GET"])
 def get_task_card(id):
-
     data = TaskCard.query.filter_by(id=id).all() 
     return jsonify(task_card_schema.dump(data))
 
 @task_card_bp.route('/', methods=['POST'])
 def create_task_card():
     entry = TaskCard()
-    json = request.get_json()
-    if type(json) == list:
-        data = json[0]
-    else:
-        data = json
+    data = get_data_from_json(request)
+
     entry.user_id = data["user_id"]
     entry.title = data["title"]
     add_entry_and_close_session(entry)
@@ -41,11 +38,8 @@ def create_task_card():
 @task_card_bp.route('/<int:id>', methods=['PUT'])
 def update_task_card(id):
     entry = TaskCard.query.get(id)
-    json = request.get_json()
-    if type(json) == list:
-        data = json[0]
-    else:
-        data = json
+    data = get_data_from_json(request)
+    
     entry.user_id = data["user_id"]
     entry.title = data["title"]
     add_entry_and_close_session(entry)

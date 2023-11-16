@@ -4,6 +4,7 @@ from todo_app.models import User  # モデルのインポート
 from todo_app import db
 from todo_app import ma
 from todo_app.routes.operate_db import add_entry_and_close_session
+from todo_app.routes.request_utils import get_data_from_json
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -30,11 +31,7 @@ def get_user(id):
 @user_bp.route('/', methods=["POST"])
 def create_user():
     entry = User()
-    json = request.get_json()
-    if type(json) == list:
-        data = json[0]
-    else:
-        data = json
+    data = get_data_from_json(request)
     entry.name = data["name"]
     entry.email = data["email"]
     entry.password = data["password"]
@@ -47,11 +44,8 @@ def create_user():
 @user_bp.route('/<int:id>', methods=["PUT"])
 def update_user(id):
     entry = User.query.get(id)
-    json = request.get_json()
-    if type(json) == list:
-        data = json[0]
-    else:
-        data = json
+    data = get_data_from_json(request)
+
     entry.name = data["name"]
     entry.email = data["email"]
     entry.password = data["password"]
@@ -63,9 +57,7 @@ def update_user(id):
 @user_bp.route('/<int:id>', methods=["DELETE"])
 def delete_user(id):
     entry = User.query.get(id)
-    db.session.delete(entry)
-    db.session.commit()    
-    db.session.close()
+    add_entry_and_close_session(entry)
 
     return 'deleted', 204
 
