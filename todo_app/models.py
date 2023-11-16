@@ -11,6 +11,7 @@ class User(db.Model):
     name = db.Column(String(32),nullable=False) 
     email = db.Column(String(32),nullable=False,unique=True) 
     password = db.Column(String(8),nullable=False) 
+    task_cards = db.relationship('TaskCard', backref='user', cascade="all,delete")
 
 class TaskCard(db.Model):
     __tablename__ = 'TaskCard'
@@ -22,6 +23,7 @@ class Task(db.Model):
     __tablename__ = 'Task'
     id = db.Column(Integer, primary_key=True) 
     content = db.Column(String(32),nullable=False)
+    status = db.Column(db.Integer, nullable=False, default=0)
     task_card_id = db.Column(Integer, db.ForeignKey('TaskCard.id'), nullable=False)
 
 def init():

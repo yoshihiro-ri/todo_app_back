@@ -2,7 +2,7 @@
 from flask import Blueprint, jsonify, request,redirect
 from todo_app.models import TaskCard, db,ma
 from sqlalchemy import desc
-from todo_app.routes.operate_db import add_entry_and_close_session
+from todo_app.routes.operate_db import add_entry_and_close_session,delete_entry_and_close_session
 from todo_app.routes.request_utils import get_data_from_json
 
 task_card_bp= Blueprint('task_card', __name__, url_prefix='/task_card')
@@ -49,6 +49,6 @@ def update_task_card(id):
 @task_card_bp.route('/<int:id>', methods=['DELETE'])
 def delete_task_card(id):
     entry = TaskCard.query.get(id)
-    add_entry_and_close_session(entry)
+    delete_entry_and_close_session(entry)
 
     return jsonify({'message': 'Task card deleted successfully'})
