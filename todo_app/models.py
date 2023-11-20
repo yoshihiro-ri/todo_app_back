@@ -18,6 +18,7 @@ class TaskCard(db.Model):
     id = db.Column(Integer, primary_key=True) 
     user_id = db.Column(Integer, db.ForeignKey('User.id'), nullable=False)
     title = db.Column(String(32),nullable=False)
+    tasks = db.relationship('Task', backref='task_card', cascade="all,delete")
 
 class Task(db.Model):
     __tablename__ = 'Task'
@@ -29,5 +30,10 @@ class Task(db.Model):
 def init():
     with app.app_context():
         db.create_all()
+        #テストコードの実行
+        from todo_app.tests import test_db
+        test_db.init()
+
 
 init()
+

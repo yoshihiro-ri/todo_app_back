@@ -1,4 +1,3 @@
-
 from flask import Blueprint, jsonify, request,redirect
 from todo_app.models import Task, db,ma
 from sqlalchemy import desc
