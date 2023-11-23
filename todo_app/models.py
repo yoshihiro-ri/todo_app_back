@@ -4,8 +4,9 @@ from todo_app import ma
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, desc
+from flask_login import UserMixin
 
-class User(db.Model):
+class User(UserMixin,db.Model):
     __tablename__ = 'User'
     id = db.Column(Integer, primary_key=True) 
     name = db.Column(String(32),nullable=False) 
@@ -31,9 +32,8 @@ def init():
     with app.app_context():
         db.create_all()
         #テストコードの実行
-        from todo_app.tests import test_db
-        test_db.init()
-
+        # from todo_app.tests import test_db
+        # test_db.init()
 
 init()
 

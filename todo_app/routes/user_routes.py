@@ -5,6 +5,8 @@ from todo_app import db
 from todo_app import ma
 from todo_app.routes.operate_db import add_entry_and_close_session,delete_entry_and_close_session
 from todo_app.routes.request_utils import get_data_from_json
+from werkzeug.security import generate_password_hash
+
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -34,7 +36,7 @@ def create_user():
     data = get_data_from_json(request)
     entry.name = data["name"]
     entry.email = data["email"]
-    entry.password = data["password"]
+    entry.password = generate_password_hash(data["password"], method='pbkdf2:sha256')
     add_entry_and_close_session(entry)
 
     latestData = User.query.order_by(desc(User.id)).first()   
