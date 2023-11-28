@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, redirect
 from sqlalchemy import desc
-from todo_app.models import User  # モデルのインポート
+from todo_app.models import User 
 from todo_app import db
 from todo_app import ma
 from todo_app.routes.operate_db import add_entry_and_close_session,delete_entry_and_close_session
@@ -18,7 +18,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
 user_schema = UserSchema(many=True)
 
 # #GET(全件参照)
-@user_bp.route('/', methods=["GET"])
+@user_bp.route('', methods=["GET"])
 def get_all_users():
     data = User.query.all()
     return jsonify(user_schema.dump(data))

@@ -14,9 +14,6 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
 
 user_schema = UserSchema(many=True)
 
-from todo_app import login_manager
-
-
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = get_data_from_json(request)
@@ -25,7 +22,7 @@ def login():
     user = User.query.filter_by(name=name).first()
     if user and check_password_hash(user.password,password):
         login_user(user)
-        return 'Logged in successfully.'
+        return jsonify({'message': 'Logged in as {}'.format(current_user.name), 'result': True})
     else:
         return 'Invalid username or password.'
 
@@ -38,8 +35,8 @@ def logout():
 @auth_bp.route('/check_login',methods=['GET'])
 def check_login():
     if current_user.is_authenticated:
-        return 'Logged in as {}'.format(current_user.name)
+        return jsonify({'message': 'Logged in as {}'.format(current_user.name)})
     else:
-        return 'Not logged in'
+        return jsonify({'message': 'Not logged in'})
 
 

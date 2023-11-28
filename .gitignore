@@ -38,5 +38,3 @@ build
 # Others
 *.cache
 *.swp
-
-todo.sqlite3
