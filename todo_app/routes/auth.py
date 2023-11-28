@@ -35,7 +35,7 @@ def logout():
 @auth_bp.route('/check_login',methods=['GET'])
 def check_login():
     if current_user.is_authenticated:
-        return jsonify({'message': 'Logged in as {}'.format(current_user.name)})
+        return jsonify({'username':current_user.name})
     else:
         return jsonify({'message': 'Not logged in'})
 
