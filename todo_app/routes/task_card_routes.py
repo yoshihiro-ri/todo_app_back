@@ -11,12 +11,13 @@ task_card_bp= Blueprint('task_card', __name__, url_prefix='/task_card')
 class TaskCardSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = TaskCard
-        fields = ("id", "user_id", "title","card_id")  
+        fields = ("id", "user_id", "title","card_id","order_index")  
 task_card_schema = TaskCardSchema(many=True)
 
 @task_card_bp.route('/', methods=['GET'])
 def get_all_task_cards():
-    data = TaskCard.query.all()
+    user_id = current_user.id
+    data = TaskCard.query.filter_by(user_id=user_id).order_by(TaskCard.order_index).all()
     return jsonify(task_card_schema.dump(data))
 
 @task_card_bp.route('/<uuid>', methods=["GET"])
@@ -43,7 +44,11 @@ def update_task_card(uuid):
     entry = TaskCard.query.filter_by(card_id=uuid).first()
     data = get_data_from_json(request)
     
-    entry.title = data["title"]
+    if 'title' in data:
+        entry.title = data['title']
+    if 'order_index' in data:
+        entry.order_index = data['order_index']
+        
     add_entry_and_close_session(entry)
 
     return jsonify({'message': 'Task card updated successfully'})
