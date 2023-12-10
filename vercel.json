@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "src": "/(.*)",
-      "dest": "/app.py"
+      "dest": "/"
     }
   ]
 }
