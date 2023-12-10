@@ -19,7 +19,7 @@ app.config.update(
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_SAMESITE='None'
 )
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, methods=['GET', 'POST', 'PUT', 'DELETE'], allow_headers=['Content-Type', 'Authorization'], supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "https://todo-app-front-xi.vercel.app/"}}, methods=['GET', 'POST', 'PUT', 'DELETE'], allow_headers=['Content-Type', 'Authorization'], supports_credentials=True)
 @app.after_request
 def after_request(response):
     response.headers["Cache-Control"] = "no-store"
