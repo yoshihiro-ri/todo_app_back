@@ -19,7 +19,10 @@ app.config.update(
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_SAMESITE='None'
 )
-CORS(app, resources={r"/*": {"origins": "https://todo-app-front-xi.vercel.app/"}}, methods=['GET', 'POST', 'PUT', 'DELETE'], allow_headers=['Content-Type', 'Authorization'], supports_credentials=True)
+CORS(app, resources={r"/*": {"origins":"*"}}, methods=['GET', 'POST', 'PUT', 'DELETE'], allow_headers=['Content-Type', 'Authorization'], supports_credentials=True)
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
 @app.after_request
 def after_request(response):
     response.headers["Cache-Control"] = "no-store"
@@ -30,4 +33,4 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
